@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/fabiosantoscode/parallel-worker#readme",
   "devDependencies": {
+    "@types/node": "^10.12.5",
     "mocha": "^3.5.3",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^3.1.6"
