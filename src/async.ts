@@ -36,7 +36,7 @@ module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
   let filename
   let counter = 0
   do {
-    filename = path.join(__dirname, 'tmp', murmur(fnStr) + '.' + counter + '.js')
+    filename = path.join(__dirname, 'tmp', murmur(fnStr) + '.' + counter++ + '.js')
   } while (fs.existsSync(filename))
   const cp = spawn(fnStr, filename)
 
