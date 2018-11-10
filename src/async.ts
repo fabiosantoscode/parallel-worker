@@ -23,7 +23,8 @@ const wrap = (fnStr: string): string => {
 }
 
 interface AsyncWorker extends NodeJS.EventEmitter {
-  send: (msg: any) => void
+  send: (msg: any) => void,
+  stop: () => void
 }
 
 type AsyncWorkerFn = (
@@ -33,7 +34,7 @@ type AsyncWorkerFn = (
 
 module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
   const fnStr = wrap(fn.toString())
-  let filename
+  let filename: string
   let counter = 0
   do {
     filename = path.join(__dirname, 'tmp', murmur(fnStr) + '.' + counter++ + '.js')
@@ -47,6 +48,10 @@ module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
   })
   ret.send = (msg: any) => {
     cp.send(circularJson.stringify(msg))
+  }
+  ret.stop = () => {
+    fs.unlinkSync(filename)
+    cp.kill(9)
   }
 
   return ret

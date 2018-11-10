@@ -22,6 +22,8 @@ describe('parallel-worker', function () {
 
     w.on('message', function (msg) {
       assert.equal(msg, 2)
+
+      w.stop()
       done()
     })
   })

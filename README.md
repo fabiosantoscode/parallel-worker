@@ -16,7 +16,7 @@ assert.equal(result, 2)
 Send and receive messages to and from the worker.
 
 ```javascript
-const w = worker((onMessage, send) => {
+const w = worker.async((onMessage, send) => {
   onMessage(function (msg) {
     send(msg + 1)
   })
@@ -27,4 +27,8 @@ w.send(1)
 w.on('message', function (msg) {
   assert.equal(msg, 2)
 })
+
+// ...
+
+w.stop()
 ```
