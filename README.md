@@ -1,4 +1,5 @@
-# parallel-worker
+# parallel-worker [![Build Status](https://travis-ci.org/fabiosantoscode/parallel-worker.svg?branch=master)](https://travis-ci.org/fabiosantoscode/parallel-worker)
+
 Get a worker or spawned node process to which you can talk to using a message channel.
 
 ## Usage (function mode)
