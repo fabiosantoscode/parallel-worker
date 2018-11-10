@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "Get a worker or spawned node process to which you can talk to using a message channel.",
   "main": "lib/index.js",
+  "browser": "lib/browser.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "prepare": "tsc --build tsconfig.json",
-    "test": "npm run prepare --silent && mocha"
+    "test": "npm run prepare --silent && mocha",
+    "html-example": "budo example-html.js -w"
   },
   "repository": {
     "type": "git",
@@ -19,6 +24,7 @@
   "homepage": "https://github.com/fabiosantoscode/parallel-worker#readme",
   "devDependencies": {
     "@types/node": "^10.12.5",
+    "budo": "^11.5.0",
     "mocha": "^3.5.3",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^3.1.6"

@@ -4,6 +4,7 @@ import { v3 as murmur } from 'murmurhash'
 import { EventEmitter } from 'events'
 import getIstanbulDecl from './get-istanbul-decl'
 import spawn from './spawn'
+import { AsyncWorker, AsyncWorkerFn } from './types'
 const circularJson = require('circular-json')
 
 const wrap = (fnStr: string): string => {
@@ -21,16 +22,6 @@ const wrap = (fnStr: string): string => {
     })`
   )
 }
-
-interface AsyncWorker extends NodeJS.EventEmitter {
-  send: (msg: any) => void,
-  stop: () => void
-}
-
-type AsyncWorkerFn = (
-  onMessage: (fn: (msg: any) => void) => void,
-  sendMessage: (msg: any) => void
-) => any
 
 module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
   const fnStr = wrap(fn.toString())

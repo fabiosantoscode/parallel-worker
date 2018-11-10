@@ -2,9 +2,11 @@
 
 Get a worker or spawned node process to which you can talk to using a message channel.
 
+Works in the browser and node.
+
 ## Usage (function mode)
 
-Call worker(fn) with your function. It should synchronously return a value, return a promise for a value, or call a callback (second argument).
+Call worker(fn) with your function. It should synchronously return a value, or return a promise for a value.
 
 ```javascript
 const result = await worker(item => item + 1)

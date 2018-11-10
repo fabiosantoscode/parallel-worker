@@ -3,6 +3,7 @@ import path from 'path'
 import { v3 as murmur } from 'murmurhash'
 import spawn from './spawn'
 import getIstanbulDecl from './get-istanbul-decl'
+import { WorkerFn } from './types'
 const asyncMode = require('./async')
 const circularJson = require('circular-json')
 
@@ -21,8 +22,6 @@ const wrap = (fnStr: string): string => {
     '})\n'
   )
 }
-
-type WorkerFn = (...args: any[]) => any
 
 module.exports = async (fn: WorkerFn, ...args: any[]) => {
   const fnStr = wrap(fn.toString())
