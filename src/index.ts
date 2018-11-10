@@ -2,14 +2,15 @@ import fs from 'fs'
 import path from 'path'
 import { v3 as murmur } from 'murmurhash'
 import spawn from './spawn'
+import getIstanbulDecl from './get-istanbul-decl'
+const asyncMode = require('./async')
 const circularJson = require('circular-json')
 
 const wrap = (fnStr: string): string => {
-  const istanbulVariableMatch = fnStr.match(/\{(cov_.*?)[[.]/)
   return (
     'var circularJson = require("circular-json")\n' +
     'var userAsyncFunction = require("user-async-function")\n' +
-    'var ' + (istanbulVariableMatch ? istanbulVariableMatch[1] : '_cov$$') + ' = {s: [], f: [], b: ' + '[' + Array(1000).join('[],') + '[]]' + '}\n' +
+    getIstanbulDecl(fnStr) + '\n' +
     'process.on("message", function (msg) {\n' +
     '  msg = circularJson.parse(msg)\n' +
     '  userAsyncFunction.apply(null, [' + fnStr + '].concat(msg)).then(function (retVal) {\n' +
@@ -45,3 +46,5 @@ module.exports = async (fn: WorkerFn, ...args: any[]) => {
   if (error) throw error
   return value
 }
+
+module.exports.async = asyncMode

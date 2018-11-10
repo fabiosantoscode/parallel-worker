@@ -11,4 +11,18 @@ describe('parallel-worker', function () {
       assert.equal(res, 2)
     })
   })
+  it('can spawn async workers', function (done) {
+    const w = worker.async(function (onMessage, sendMessage) {
+      onMessage(function (msg) {
+        sendMessage(msg + 1)
+      })
+    })
+
+    w.send(1)
+
+    w.on('message', function (msg) {
+      assert.equal(msg, 2)
+      done()
+    })
+  })
 })
