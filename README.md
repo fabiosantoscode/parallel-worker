@@ -17,17 +17,23 @@ assert.equal(result, 2)
 
 Send and receive messages to and from the worker.
 
-Use the `onStdout` and `onStderr` options to pass functions that subscribe to stdout and stderr streams on the worker, if you're in node.
+Use the `stdout` and `stderr` events to subscribe to stdout and stderr streams on the worker, if you're in node. Subscribing to stdout and stderr does not work in the browser.
 
 ```javascript
 const w = worker.async((onMessage, send) => {
   onMessage(function (msg) {
     send(msg + 1)
   })
-}, { onStdout, onStderr })
+})
 
 w.send(1)
 
+w.on('stdout', (d) => {
+  console.log(d)
+})
+w.on('stderr', (d) => {
+  console.error(d)
+})
 w.on('message', function (msg) {
   assert.equal(msg, 2)
 })

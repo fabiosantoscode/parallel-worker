@@ -33,15 +33,16 @@ describe('parallel-worker', function () {
     const w = worker.async(function (onMessage, send) {
       console.log('hello world')
       console.error('hey, slow down')
-    }, {
-      onStdout: function (d) {
-        called++
-        assert.equal(d, 'hello world\n')
-      },
-      onStderr: function (e) {
-        assert.equal(e, 'hey, slow down\n')
-        called++
-      }
+    })
+
+    w.on('stdout', function (d) {
+      called++
+      assert.equal(d, 'hello world\n')
+    })
+
+    w.on('stderr', function (e) {
+      assert.equal(e, 'hey, slow down\n')
+      called++
     })
 
     setTimeout(() => {
