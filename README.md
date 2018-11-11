@@ -4,7 +4,7 @@ Get a worker or spawned node process to which you can talk to using a message ch
 
 Works in the browser and node.
 
-## Usage (function mode)
+## function mode
 
 Call worker(fn) with your function. It should synchronously return a value, or return a promise for a value.
 
@@ -13,7 +13,7 @@ const result = await worker(item => item + 1)
 assert.equal(result, 2)
 ```
 
-## Usage (async mode)
+## async mode
 
 Send and receive messages to and from the worker.
 
@@ -34,3 +34,7 @@ w.on('message', function (msg) {
 
 w.stop()
 ```
+
+## strings instead of functions
+
+You can always use a string with a function instead of a real function. This is useful because you may want to require other modules with webpack.
