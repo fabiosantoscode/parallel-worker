@@ -29,7 +29,7 @@ describe('parallel-worker', function () {
   })
   it('can read stdout of the worker', function (done) {
     this.timeout(10000)
-    let called = 0
+    var called = 0
     var w = worker.async(function (onMessage, send) {
       console.log('hello world')
       console.error('hey, slow down')
