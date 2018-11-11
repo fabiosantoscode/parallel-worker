@@ -4,7 +4,7 @@ import { v3 as murmur } from 'murmurhash'
 import { EventEmitter } from 'events'
 import getIstanbulDecl from './get-istanbul-decl'
 import spawn from './spawn'
-import { AsyncWorker, AsyncWorkerFn } from './types'
+import { AsyncWorker, AsyncWorkerFn, OutputListener } from './types'
 const circularJson = require('circular-json')
 
 const wrap = (fnStr: string): string => {
@@ -23,7 +23,10 @@ const wrap = (fnStr: string): string => {
   )
 }
 
-module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
+module.exports = (
+  fn: AsyncWorkerFn,
+  { onStdout, onStderr }: { onStdout: OutputListener | undefined, onStderr: OutputListener | undefined } = { onStdout: undefined, onStderr: undefined }
+): AsyncWorker => {
   const fnStr = wrap(fn.toString())
   let filename: string
   let counter = 0
@@ -37,6 +40,8 @@ module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
   cp.on('message', (msg: any) => {
     ret.emit('message', msg)
   })
+  if (onStdout) cp.stdout.on('data', (d: Buffer) => onStdout(d.toString()))
+  if (onStderr) cp.stderr.on('data', (d: Buffer) => onStderr(d.toString()))
   ret.send = (msg: any) => {
     cp.send(circularJson.stringify(msg))
   }

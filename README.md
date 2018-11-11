@@ -17,12 +17,14 @@ assert.equal(result, 2)
 
 Send and receive messages to and from the worker.
 
+Use the `onStdout` and `onStderr` options to pass functions that subscribe to stdout and stderr streams on the worker, if you're in node.
+
 ```javascript
 const w = worker.async((onMessage, send) => {
   onMessage(function (msg) {
     send(msg + 1)
   })
-})
+}, { onStdout, onStderr })
 
 w.send(1)
 

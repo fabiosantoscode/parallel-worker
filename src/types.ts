@@ -11,3 +11,4 @@ export type AsyncWorkerFn = (
   sendMessage: (msg: any) => void
 ) => any
 
+export type OutputListener = (output: string) => void

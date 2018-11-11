@@ -27,4 +27,26 @@ describe('parallel-worker', function () {
       done()
     })
   })
+  it('can read stdout of the worker', function (done) {
+    this.timeout(10000)
+    let called = 0
+    const w = worker.async(function (onMessage, send) {
+      console.log('hello world')
+      console.error('hey, slow down')
+    }, {
+      onStdout: function (d) {
+        called++
+        assert.equal(d, 'hello world\n')
+      },
+      onStderr: function (e) {
+        assert.equal(e, 'hey, slow down\n')
+        called++
+      }
+    })
+
+    setTimeout(() => {
+      assert.equal(called, 2)
+      done()
+    }, 500)
+  })
 })
