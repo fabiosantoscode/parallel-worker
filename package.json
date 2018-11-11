@@ -1,6 +1,6 @@
 {
   "name": "parallel-worker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Get a worker or spawned node process to which you can talk to using a message channel.",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
