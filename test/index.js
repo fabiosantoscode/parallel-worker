@@ -1,9 +1,9 @@
-const assert = require('assert')
-const worker = require('..')
+var assert = require('assert')
+var worker = require('..')
 
 describe('parallel-worker', function () {
   it('spawns a worker that works in another process', function () {
-    const w = worker(function (item) {
+    var w = worker(function (item) {
       return item + 1
     }, 1)
 
@@ -12,7 +12,7 @@ describe('parallel-worker', function () {
     })
   })
   it('can spawn async workers', function (done) {
-    const w = worker.async(function (onMessage, sendMessage) {
+    var w = worker.async(function (onMessage, sendMessage) {
       onMessage(function (msg) {
         sendMessage(msg + 1)
       })
@@ -30,7 +30,7 @@ describe('parallel-worker', function () {
   it('can read stdout of the worker', function (done) {
     this.timeout(10000)
     let called = 0
-    const w = worker.async(function (onMessage, send) {
+    var w = worker.async(function (onMessage, send) {
       console.log('hello world')
       console.error('hey, slow down')
     })
