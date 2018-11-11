@@ -46,6 +46,7 @@ describe('parallel-worker', function () {
     })
 
     setTimeout(() => {
+      w.stop()
       assert.equal(called, 2)
       done()
     }, 500)
