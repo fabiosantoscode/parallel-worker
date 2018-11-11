@@ -17,8 +17,8 @@ const wrap = (fnStr: string): string => {
         msg = circularJson.parse(msg)
         fn(msg)
       })
-    }, function sendMessage(msg) {
-      process.send(circularJson.parse(msg))
+    }, function send(msg) {
+      process.send(circularJson.stringify(msg))
     })`
   )
 }
@@ -42,7 +42,7 @@ module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
   }
   ret.stop = () => {
     fs.unlinkSync(filename)
-    cp.kill(9)
+    cp.kill()
   }
 
   return ret

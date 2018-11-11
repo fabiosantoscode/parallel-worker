@@ -31,16 +31,15 @@ module.exports = async (fn: WorkerFn, ...args: any[]) => {
     filename = path.join(__dirname, 'tmp', murmur(fnStr) + '.' + counter++ + '.js')
   } while (fs.existsSync(filename))
   const cp = spawn(fnStr, filename)
-  function waitForMessage (): Promise<any> {
-    return new Promise(resolve => {
-      cp.once('message', (msg: string) => resolve(circularJson.parse(msg)))
-    })
-  }
 
-  setImmediate(() => { cp.send(circularJson.stringify(args)) })
-  const { error, value } = await waitForMessage()
+  cp.send(circularJson.stringify(args))
+
+  const { error, value } = await new Promise(resolve => {
+    cp.once('message', (msg: string) => resolve(circularJson.parse(msg)))
+  }) as any
 
   fs.unlinkSync(filename)
+  cp.kill()
 
   if (error) throw error
   return value

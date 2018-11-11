@@ -43,7 +43,7 @@ module.exports = (fn: WorkerFn, ...args: any[]): any => {
   `
   const worker = new Worker(urlStart + wrap(fn.toString()))
 
-  setImmediate(() => { worker.postMessage(args) })
+  worker.postMessage(args)
 
   return new Promise(resolve => {
     worker.onmessage = resolve
