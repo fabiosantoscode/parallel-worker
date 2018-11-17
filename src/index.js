@@ -3,11 +3,10 @@ import path from 'path'
 import { v3 as murmur } from 'murmurhash'
 import spawn from './spawn'
 import getIstanbulDecl from './get-istanbul-decl'
-import { WorkerFn } from './types'
 const asyncMode = require('./async')
 const circularJson = require('circular-json')
 
-const wrap = (fnStr: string): string => {
+const wrap = (fnStr) => {
   return (
     'var circularJson = require("circular-json")\n' +
     'var userAsyncFunction = require("user-async-function")\n' +
@@ -23,7 +22,7 @@ const wrap = (fnStr: string): string => {
   )
 }
 
-module.exports = async (fn: WorkerFn, ...args: any[]) => {
+module.exports = async (fn, ...args) => {
   const fnStr = wrap(fn.toString())
   let filename
   let counter = 0
@@ -35,8 +34,8 @@ module.exports = async (fn: WorkerFn, ...args: any[]) => {
   cp.send(circularJson.stringify(args))
 
   const { error, value } = await new Promise(resolve => {
-    cp.once('message', (msg: string) => resolve(circularJson.parse(msg)))
-  }) as any
+    cp.once('message', (msg) => resolve(circularJson.parse(msg)))
+  })
 
   fs.unlinkSync(filename)
   cp.kill()

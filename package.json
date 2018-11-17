@@ -8,7 +8,7 @@
     "lib"
   ],
   "scripts": {
-    "prepare": "tsc --build tsconfig.json",
+    "prepare": "babel src -d lib",
     "test": "npm run prepare --silent && mocha",
     "html-example": "budo example-html.js -w"
   },
@@ -24,15 +24,15 @@
   "homepage": "https://github.com/fabiosantoscode/parallel-worker#readme",
   "devDependencies": {
     "@types/node": "^10.12.5",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "budo": "^11.5.0",
     "mocha": "^3.5.3",
-    "tslint-config-standard": "^8.0.1",
     "typescript": "^3.1.6"
   },
   "dependencies": {
     "@types/murmurhash": "0.0.1",
     "circular-json": "^0.5.9",
-    "es6-promise": "^4.2.5",
     "murmurhash": "0.0.2",
     "semver": "^5.6.0",
     "user-async-function": "^1.1.3"

@@ -3,8 +3,8 @@ import { EventEmitter } from 'events'
 
 const urlStart = 'data:text/javascript;charset=utf-8,'
 
-function async (fn: AsyncWorkerFn): AsyncWorker {
-  const wrap = (fn: string) => `
+function async (fn) {
+  const wrap = (fn) => `
     (${fn})(function onMessage(fn) {
       self.addEventListener('message', function (msg) {
         fn(msg.data)
@@ -16,9 +16,9 @@ function async (fn: AsyncWorkerFn): AsyncWorker {
 
   const worker = new Worker(urlStart + wrap(fn.toString()))
 
-  const ret = new EventEmitter() as AsyncWorker
+  const ret = new EventEmitter()
 
-  worker.addEventListener('message', (msg: any) => {
+  worker.addEventListener('message', (msg) => {
     ret.emit('message', msg.data)
   })
   ret.send = (msg) => {
@@ -31,8 +31,8 @@ function async (fn: AsyncWorkerFn): AsyncWorker {
   return ret
 }
 
-module.exports = (fn: WorkerFn, ...args: any[]): any => {
-  const wrap = (fn: string) => `
+module.exports = (fn, ...args) => {
+  const wrap = (fn) => `
     self.onmessage = function (args) {
       Promise.resolve().then(function () { return (${fn}).apply(null, args.data) }).then(function (ret) {
         self.postMessage({value: ret})
@@ -47,7 +47,7 @@ module.exports = (fn: WorkerFn, ...args: any[]): any => {
 
   return new Promise(resolve => {
     worker.onmessage = resolve
-  }).then((ret: any) => {
+  }).then((ret) => {
     if (ret.data.error) throw ret.data.error
     return ret.data.value
   })

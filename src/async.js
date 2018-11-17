@@ -4,11 +4,9 @@ import { v3 as murmur } from 'murmurhash'
 import { EventEmitter } from 'events'
 import getIstanbulDecl from './get-istanbul-decl'
 import spawn from './spawn'
-import { AsyncWorker, AsyncWorkerFn, OutputListener } from './types'
-const circularJson = require('circular-json')
+import circularJson from 'circular-json'
 
-const wrap = (fnStr: string): string => {
-  const istanbulVariableMatch = fnStr.match(/\{(cov_.*?)[[.]/)
+const wrap = fnStr => {
   return (
     `var circularJson = require("circular-json")
     ${getIstanbulDecl(fnStr)}
@@ -23,23 +21,23 @@ const wrap = (fnStr: string): string => {
   )
 }
 
-module.exports = (fn: AsyncWorkerFn): AsyncWorker => {
+module.exports = fn => {
   const fnStr = wrap(fn.toString())
-  let filename: string
+  let filename
   let counter = 0
   do {
     filename = path.join(__dirname, 'tmp', murmur(fnStr) + '.' + counter++ + '.js')
   } while (fs.existsSync(filename))
   const cp = spawn(fnStr, filename)
 
-  const ret = new EventEmitter() as AsyncWorker
+  const ret = new EventEmitter()
 
-  cp.on('message', (msg: any) => {
+  cp.on('message', msg => {
     ret.emit('message', msg)
   })
-  cp.stdout.on('data', (d: Buffer) => { ret.emit('stdout', d.toString()) })
-  cp.stderr.on('data', (d: Buffer) => { ret.emit('stderr', d.toString()) })
-  ret.send = (msg: any) => {
+  cp.stdout.on('data', d => { ret.emit('stdout', d.toString()) })
+  cp.stderr.on('data', d => { ret.emit('stderr', d.toString()) })
+  ret.send = msg => {
     cp.send(circularJson.stringify(msg))
   }
   ret.stop = () => {

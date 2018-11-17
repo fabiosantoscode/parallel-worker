@@ -1,3 +1,4 @@
+require('babel-polyfill')
 var assert = require('assert')
 var worker = require('..')
 
@@ -45,7 +46,7 @@ describe('parallel-worker', function () {
       called++
     })
 
-    setTimeout(() => {
+    setTimeout(function () {
       w.stop()
       assert.equal(called, 2)
       done()
