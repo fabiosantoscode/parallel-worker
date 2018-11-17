@@ -1,10 +1,13 @@
+'use strict'
+
+if (!global._babelPolyfill) require('babel-polyfill')
 import fs from 'fs'
 import path from 'path'
 import { v3 as murmur } from 'murmurhash'
 import spawn from './spawn'
 import getIstanbulDecl from './get-istanbul-decl'
-const asyncMode = require('./async')
-const circularJson = require('circular-json')
+import asyncMode from './async'
+import circularJson from 'circular-json'
 
 const wrap = (fnStr) => {
   return (

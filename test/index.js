@@ -1,4 +1,3 @@
-require('babel-polyfill')
 var assert = require('assert')
 var worker = require('..')
 
