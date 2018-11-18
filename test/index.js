@@ -14,14 +14,14 @@ describe('parallel-worker', function () {
   it('can spawn async workers', function (done) {
     var w = worker.async(function (onMessage, sendMessage) {
       onMessage(function (msg) {
-        sendMessage(msg + 1)
+        sendMessage({ value: msg + 1 })
       })
     })
 
     w.send(1)
 
     w.on('message', function (msg) {
-      assert.equal(msg, 2)
+      assert.equal(msg.value, 2)
 
       w.stop()
       done()

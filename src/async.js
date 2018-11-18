@@ -33,7 +33,7 @@ module.exports = fn => {
   const ret = new EventEmitter()
 
   cp.on('message', msg => {
-    ret.emit('message', msg)
+    ret.emit('message', circularJson.parse(msg))
   })
   cp.stdout.on('data', d => { ret.emit('stdout', d.toString()) })
   cp.stderr.on('data', d => { ret.emit('stderr', d.toString()) })
